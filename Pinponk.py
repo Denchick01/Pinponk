@@ -29,18 +29,21 @@ class Enemy (GameSprite):
 window = display.set_mode((700, 500))
 display.set_caption("Лабиринт")
 background = transform.scale(image.load("fomr.jpg"),(700, 500))
-player = Player('ctena.jpeg', 0, 10, 15, 25, 100)
-Enemy = Enemy('ctena.jpeg', 675, 0, 15, 25, 100)
-player3 = Player('merch.png', 330, 240, 10, 65, 65)
+player = Player('ctena.jpeg', 0, 150, 15, 25, 100)
+Enemy = Enemy('ctena.jpeg', 675, 150, 15, 25, 100)
+ball = Player('merch.png', 330, 240, 10, 65, 65)
 
-
+            
 clock = time.Clock()
 FPS = 60
 font.init()
 font = font.Font(None, 70)
-win = font.render('You Win', True, (255, 215, 0))
-gg = font.render('You Lose', True, (255, 215, 0))
-finish = player == player3
+comput = 0
+compute = 0
+finish = player == ball
+speed_x = 5
+speed_y = 5
+i = 0
 game = True
 while game:
     for e in event.get():
@@ -48,11 +51,29 @@ while game:
             game = False
     if finish != True:
         window.blit(background,(0,0))
+        ball.rect.x += speed_x
+        ball.rect.y += speed_y
+        if ball.rect.y > 500 - 50 or ball.rect.y < 0:
+            speed_y *= -1
+        if sprite.collide_rect(player, ball):
+            speed_x *= -1
+        if sprite.collide_rect(Enemy, ball): 
+            speed_x *= -1
+        if ball.rect.x >= 700:
+            ball.rect.x = 350
+            comput = comput + 1
+        if ball.rect.x <= 0:
+            ball.rect.x = 350
+            compute = compute + 1
+        schet1 = font.render(str(comput), True, (255, 215, 0))
+        schet2 = font.render(str(compute), True, (255, 215, 0))   
+        window.blit(schet1, (240, 0))
+        window.blit(schet2, (450, 0))
         player.reset()
         player.update()
         Enemy.reset()
         Enemy.update()
-        player3.reset()
+        ball.reset()
         
 
 
